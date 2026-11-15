@@ -1,6 +1,64 @@
 <?php
-// Registration page: shows the sign-up form.
-// Saving the user is added in a later step.
+/**
+ * Checks the registration data on the server.
+ *
+ * @param string $username The username
+ * @param string $email    The email address
+ * @param string $password The password
+ * @param string $role     The chosen role id ("1" = Member, "2" = Librarian)
+ * @param string $code     The special registration code
+ * @return array List of error messages (empty if everything is valid)
+ */
+function validateRegistration($username, $email, $password, $role, $code)
+{
+    $errors = [];
+    $codes = ["1" => "MEMB2026", "2" => "LIBR2026"];
+
+    if ($username === "") {
+        $errors[] = "Username is required.";
+    }
+
+    if ($email === "") {
+        $errors[] = "Email is required.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Email is not valid.";
+    }
+
+    if ($password === "") {
+        $errors[] = "Password is required.";
+    } elseif (strlen($password) < 6) {
+        $errors[] = "Password must be at least 6 characters.";
+    }
+
+    if ($role !== "1" && $role !== "2") {
+        $errors[] = "Please select a role.";
+    }
+
+    if ($code === "") {
+        $errors[] = "Registration code is required.";
+    } elseif (isset($codes[$role]) && $code !== $codes[$role]) {
+        $errors[] = "Invalid registration code.";
+    }
+
+    return $errors;
+}
+
+$errors = [];
+$message = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $username = trim($_POST["username"] ?? "");
+    $email = trim($_POST["email"] ?? "");
+    $password = $_POST["password"] ?? "";
+    $role = $_POST["role"] ?? "";
+    $code = trim($_POST["code"] ?? "");
+
+    $errors = validateRegistration($username, $email, $password, $role, $code);
+
+    if (empty($errors)) {
+        $message = "Validation passed. Saving the user is added in the next step.";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +70,8 @@
 <body>
     <h1>Register</h1>
 
-    <div id="errorMessages"></div>
+    <div id="errorMessages"><?php echo implode("<br>", $errors); ?></div>
+<p><?php echo $message; ?></p>
 
     <form id="registerForm" method="post" action="register.php" novalidate>
 
@@ -40,5 +99,6 @@
 
     <p>Already have an account? <a href="login.php">Login</a></p>
     <script src="js/register.js"></script>
+
 </body>
 </html>
