@@ -12,6 +12,8 @@
 <body>
     <h1>Register</h1>
 
+    <div id="errorMessages"></div>
+
     <form id="registerForm" method="post" action="register.php" novalidate>
 
         <label for="username">Username</label><br>
@@ -37,5 +39,6 @@
     </form>
 
     <p>Already have an account? <a href="login.php">Login</a></p>
+    <script src="js/register.js"></script>
 </body>
 </html>
