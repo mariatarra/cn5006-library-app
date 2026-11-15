@@ -1,4 +1,5 @@
 <?php
+require "includes/db.php";
 /**
  * Checks the registration data on the server.
  *
@@ -42,7 +43,43 @@ function validateRegistration($username, $email, $password, $role, $code)
 
     return $errors;
 }
+/**
+ * Saves a new user in the database. The password is stored as a hash.
+ *
+ * @param mysqli $conn     The database connection
+ * @param string $username The username
+ * @param string $email    The email address
+ * @param string $password The password (plain text, hashed here)
+ * @param int    $roleId   The role id (1 = Member, 2 = Librarian)
+ * @return string Empty if the user was saved, otherwise an error message
+ */
+function saveUser($conn, $username, $email, $password, $roleId)
+{
+    // Check that the username and email are not already used
+    $stmt = mysqli_prepare($conn, "SELECT user_id FROM users WHERE username = ? OR email = ?");
+    mysqli_stmt_bind_param($stmt, "ss", $username, $email);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
 
+    if (mysqli_stmt_num_rows($stmt) > 0) {
+        mysqli_stmt_close($stmt);
+        return "Username or email is already registered.";
+    }
+    mysqli_stmt_close($stmt);
+
+    // Hash the password and insert the new user
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $stmt = mysqli_prepare($conn, "INSERT INTO users (username, email, password, role_id) VALUES (?, ?, ?, ?)");
+    mysqli_stmt_bind_param($stmt, "sssi", $username, $email, $hash, $roleId);
+    $saved = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    if (!$saved) {
+        return "Registration failed. Please try again.";
+    }
+
+    return "";
+}
 $errors = [];
 $message = "";
 
@@ -55,9 +92,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $errors = validateRegistration($username, $email, $password, $role, $code);
 
-    if (empty($errors)) {
-        $message = "Validation passed. Saving the user is added in the next step.";
-    }
+           if (empty($errors)) {
+           $conn = getConnection();
+           $saveError = saveUser($conn, $username, $email, $password, (int)$role);
+           mysqli_close($conn);
+
+           if ($saveError === "") {
+               $message = "Registration successful. You can now log in.";
+           } else {
+               $errors[] = $saveError;
+           }
+       }
 }
 ?>
 <!DOCTYPE html>
