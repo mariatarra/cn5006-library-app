@@ -1,7 +1,6 @@
 <?php
-// Temporary version: only shows that the session works.
-// The real dashboard (menus, access control) is built in a later step.
-session_start();
+require "includes/auth.php";
+requireLogin();
 ?>
 <!DOCTYPE html>
 <html lang="en">
