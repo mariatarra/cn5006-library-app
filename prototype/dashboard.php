@@ -15,5 +15,6 @@ session_start();
     <p>Username: <?php echo htmlspecialchars($_SESSION["username"] ?? ""); ?></p>
     <p>User ID: <?php echo $_SESSION["user_id"] ?? ""; ?></p>
     <p>Role ID: <?php echo $_SESSION["role_id"] ?? ""; ?></p>
+    <p><a href="logout.php">Logout</a></p>
 </body>
 </html>
