@@ -1,6 +1,9 @@
 <?php
 require "includes/auth.php";
+require "includes/menu.php";
 requireLogin();
+
+$roleName = ($_SESSION['role_id'] == ROLE_LIBRARIAN) ? "Librarian" : "Member";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,10 +13,10 @@ requireLogin();
     <title>Dashboard - Library</title>
 </head>
 <body>
+    <?php renderMenu(); ?>
+
     <h1>Dashboard</h1>
-    <p>Username: <?php echo htmlspecialchars($_SESSION["username"] ?? ""); ?></p>
-    <p>User ID: <?php echo $_SESSION["user_id"] ?? ""; ?></p>
-    <p>Role ID: <?php echo $_SESSION["role_id"] ?? ""; ?></p>
-    <p><a href="logout.php">Logout</a></p>
+    <p>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>.</p>
+    <p>Your role: <?php echo $roleName; ?></p>
 </body>
 </html>
