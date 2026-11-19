@@ -1,0 +1,11 @@
+/* Map: Leaflet needs the container to have a height */
+#map {
+    height: 400px;
+    width: 100%;
+}
+
+/* Images never get wider than their container */
+img {
+    max-width: 100%;
+    height: auto;
+}
