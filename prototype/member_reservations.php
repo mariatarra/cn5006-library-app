@@ -9,6 +9,7 @@ requireRole(ROLE_MEMBER);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>My Reservations - Library</title>
+        <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <?php renderMenu(); ?>

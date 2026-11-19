@@ -1,11 +1,195 @@
+/* Colour palette used on every page */
+:root {
+    --shikon: #282227;
+    --dark-taupe: #493C3C;
+    --missing-link: #6D5B57;
+    --tempered-allspice: #9B7E6D;
+    --fossil-tan: #D0B08F;
+}
+
+/* Basic setup: padding and borders are included in the width */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--fossil-tan);
+    background-color: var(--shikon);
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px 48px 20px;
+}
+
+/* Headings */
+h1,
+h2 {
+    font-weight: normal;
+}
+
+h1 {
+    font-size: 2rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 32px 0 16px 0;
+}
+
+h2 {
+    font-size: 1.4rem;
+    font-style: italic;
+    margin-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--missing-link);
+}
+
+/* Paragraphs stay narrow so they are comfortable to read */
+p {
+    max-width: 65ch;
+}
+
+/* Links */
+a {
+    color: var(--fossil-tan);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+a:hover {
+    color: var(--tempered-allspice);
+}
+
+/* Navigation: a simple line, used on the home page and the dashboard pages */
+nav {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--missing-link);
+    color: var(--tempered-allspice);
+}
+
+nav a {
+    display: inline-block;
+    padding: 4px 6px;
+    text-decoration: none;
+    letter-spacing: 0.06em;
+}
+
+nav a:hover {
+    color: var(--fossil-tan);
+    text-decoration: underline;
+}
+
+/* Forms */
+form {
+    max-width: 420px;
+}
+
+label {
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--fossil-tan);
+    background-color: var(--dark-taupe);
+    border: 1px solid var(--missing-link);
+    border-radius: 2px;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--fossil-tan);
+}
+
+option {
+    color: var(--fossil-tan);
+    background-color: var(--dark-taupe);
+}
+
+button {
+    padding: 10px 28px;
+    font-family: inherit;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--shikon);
+    background-color: var(--fossil-tan);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--tempered-allspice);
+}
+
+/* Error messages: a soft red, so they stay readable on the dark background */
+#errorMessages {
+    color: #f0b8a8;
+    margin-bottom: 12px;
+}
+
+#errorMessages ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+/* Images never get wider than their container, and get a light sepia tint */
+img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--missing-link);
+    filter: sepia(25%);
+}
+
+/* Sections on the home page */
+section {
+    margin-bottom: 24px;
+}
+
 /* Map: Leaflet needs the container to have a height */
 #map {
     height: 400px;
     width: 100%;
+    border: 1px solid var(--missing-link);
 }
 
-/* Images never get wider than their container */
-img {
-    max-width: 100%;
-    height: auto;
+/* Warm tint on the map pictures to match the palette */
+.leaflet-tile-pane {
+    filter: sepia(60%) brightness(0.85) contrast(1.05);
+}
+
+/* Small screens (phones) */
+@media (max-width: 600px) {
+    body {
+        font-size: 17px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    #map {
+        height: 300px;
+    }
+}
+
+/* Wide screens: the home page sections go side by side, the map spans the full width */
+@media (min-width: 800px) {
+    main {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+
+    main section:last-child {
+        grid-column: 1 / -1;
+    }
 }

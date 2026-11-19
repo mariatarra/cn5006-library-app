@@ -11,6 +11,7 @@ $roleName = ($_SESSION['role_id'] == ROLE_LIBRARIAN) ? "Librarian" : "Member";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard - Library</title>
+        <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <?php renderMenu(); ?>
