@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "includes/db.php";
+require "includes/User.php";
 
 /**
  * Checks the login data on the server.
@@ -26,35 +27,7 @@ function validateLogin($email, $password)
     return $errors;
 }
 
-/**
- * Finds the user by email and checks the password against the stored hash.
- *
- * @param mysqli $conn     The database connection
- * @param string $email    The email address
- * @param string $password The password (plain text)
- * @return array|null The user's user_id, username and role_id, or null if the login is wrong
- */
-function checkCredentials($conn, $email, $password)
-{
-    $stmt = mysqli_prepare($conn, "SELECT user_id, username, password, role_id FROM users WHERE email = ?");
-    mysqli_stmt_bind_param($stmt, "s", $email);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $userId, $username, $hash, $roleId);
 
-    $user = null;
-
-    if (mysqli_stmt_fetch($stmt) && password_verify($password, $hash)) {
-        $user = [
-            "user_id" => $userId,
-            "username" => $username,
-            "role_id" => $roleId
-        ];
-    }
-
-    mysqli_stmt_close($stmt);
-
-    return $user;
-}
 
 $errors = [];
 
@@ -66,7 +39,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (empty($errors)) {
         $conn = getConnection();
-        $user = checkCredentials($conn, $email, $password);
+                $userModel = new User($conn);
+        $user = $userModel->checkCredentials($email, $password);
         mysqli_close($conn);
 
         if ($user === null) {
