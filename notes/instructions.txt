@@ -1,0 +1,11 @@
+CN5006 Part A: notes for the examiner
+
+1. Copy the prototype folder into the web server folder, for example C:\xampp\htdocs
+2. Start Apache and MySQL.
+3. In phpMyAdmin, with no database selected, open Import, choose
+   prototype/database/library_db.sql and run it. This creates the database library_db.
+4. The database settings are in prototype/includes/db.php
+   (host localhost, user root, empty password, database library_db).
+5. Open http://localhost/prototype/index.php
+6. Registration codes: members MEMB2026, librarians LIBR2026.
+7. Repository: https://github.com/mariatarra/cn5006-library-app
